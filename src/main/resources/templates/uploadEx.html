@@ -9,12 +9,32 @@
     <input name="uploadFiles" type="file" multiple>
     <button class="uploadBtn">Upload</button>
 
+    <div class="uploadResult">
+
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.6.0.js"
             integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
             crossorigin="anonymous"></script>
 
 
     <script>
+
+        var imgNum = 0;
+
+        function showUploadedImages(arr) {
+            console.log(arr);
+
+            var divArea = $(".uploadResult");
+
+            $(".uploadResult *").remove();
+
+            for(var i = 0; i < arr.length; i++) {
+                imgNum++;
+                divArea.append("<img class='img"+ imgNum +"'src='/display?fileName=" + arr[i].imageURL + "'>");
+            }
+        }
+
 
         $('.uploadBtn').click(function( ) {
 
@@ -29,8 +49,6 @@
                 formData.append("uploadFiles", files[i]);
             }
 
-
-
             $.ajax({
                 url: '/uploadAjax',
                 processData: false,
@@ -39,7 +57,7 @@
                 type: 'POST',
                 dataType: 'json',
                 success: function(result){
-                    console.log(result);
+                    showUploadedImages(result);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     console.log(textStatus);
